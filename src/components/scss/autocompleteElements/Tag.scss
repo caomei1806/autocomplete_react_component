@@ -1,0 +1,17 @@
+@import "../variables.scss";
+.tag {
+	background-color: $lightGrey;
+	padding: $smallGap;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: $smallGap;
+	&-name {
+		color: darken($grey, 20%);
+	}
+	&-close {
+		cursor: pointer;
+	}
+}

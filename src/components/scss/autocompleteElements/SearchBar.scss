@@ -1,0 +1,26 @@
+@import "../variables.scss";
+.search-bar {
+	flex-grow: 1;
+	border: 1px solid $grey;
+	& > * {
+		padding: $defaultInsidePadding;
+	}
+	.search-input {
+		border: none;
+		border-bottom: 1px solid $grey;
+		width: calc(100% - 2em);
+		outline: none;
+		&.focus {
+			outline: none;
+		}
+		&::placeholder {
+			color: $grey;
+		}
+	}
+	.tags-picked {
+		display: flex;
+		flex-direction: row;
+		gap: $smallGap;
+		flex-wrap: wrap;
+	}
+}
