@@ -5,7 +5,9 @@ import { useGlobalContext } from '../../context'
 const SearchList = () => {
 	const { data, currentTag, setCurrentTag, filterData, searchItemsRef} = useGlobalContext()
 	const [filteredData, setFilteredData] = useState(data)
-
+	useEffect(() => {
+		searchItemsRef.current[0].parentNode.scrollTop = 0
+	},[])
 	useEffect(() => {
 		const newData = filterData(currentTag.value)
 		setFilteredData(newData)
@@ -20,8 +22,6 @@ const SearchList = () => {
 		a.className = 'search-list-element focus'
 	}
 	const focusOnMe = (tabIndex = 0, action = 'none') => {
-		// if(searchItemsRef.current === null){
-		//console.log(searchItemsRef.current[tabIndex].parentNode.contains(document.activeElement))
 		if (tabIndex === 0 && searchItemsRef.current[0]){
 			searchItemsRef.current[0].className = 'search-list-element focus'
 			if(searchItemsRef.current[1])
@@ -40,14 +40,16 @@ const SearchList = () => {
 		}
 	}
 	const handleKeyPress = (e) => {
-		console.log('im in')
+		const browserZoomLevel = Math.round(window.devicePixelRatio);
+		console.log(browserZoomLevel, e.target.scrollTop)
+		if(e.target.tabIndex === 1)	e.target.scrollTop = 40
 		if (e.key === 'ArrowDown') {
 			const currentListLength = e.target.children.length
 			if(e.target.tabIndex < currentListLength - 1){
 			e.target.tabIndex += 1
 			focusOnMe(e.target.tabIndex, 'ArrowDown')
-			const singleElementHeight = searchItemsRef.current[e.target.tabIndex].offsetHeight
-			const scrollHeight = 30 + singleElementHeight * parseInt(e.target.tabIndex - 2)
+			const singleElementHeight = searchItemsRef.current[e.target.tabIndex].getBoundingClientRect().height
+			const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex - 1) * browserZoomLevel
 			e.target.scrollTop = scrollHeight
 			}
 		}
@@ -55,8 +57,8 @@ const SearchList = () => {
 			if (e.target.tabIndex > 0) {
 				e.target.tabIndex -= 1
 				focusOnMe(e.target.tabIndex, 'ArrowUp')
-				const singleElementHeight = searchItemsRef.current[e.target.tabIndex].offsetHeight
-				const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex + 1) + 10
+				const singleElementHeight = searchItemsRef.current[e.target.tabIndex].getBoundingClientRect().height
+				const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex + 1) * browserZoomLevel
 				e.target.scrollTop = scrollHeight
 			}
 			else{
