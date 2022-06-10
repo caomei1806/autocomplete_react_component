@@ -24,7 +24,9 @@
 	}
 	&-element {
 		padding: $defaultInsidePadding;
-		&:hover,
+		&:hover {
+			background-color: lighten($lightGrey, 5%);
+		}
 		&.focus {
 			background-color: $lightGrey;
 		}

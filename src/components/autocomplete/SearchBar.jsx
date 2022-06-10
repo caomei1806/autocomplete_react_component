@@ -2,13 +2,19 @@ import React, { useState } from 'react'
 import Tag from './Tag'
 import '../scss/autocompleteElements/SearchBar.scss'
 import { useGlobalContext } from '../../context';
+import normalizeStringValue from '../../utils/normalizeStringValue';
 const SearchBar = () => {
-	const { tagsPicked, setTagsPicked, currentTag, setCurrentTag } = useGlobalContext()
+	const { tagsPicked, currentTag, setCurrentTag, searchItemsRef, focusOnMe } = useGlobalContext()
 	const [inputState, setInputState] = useState('')
-	const addTag = (e) => {
+	const handleKeyPress = (e) => {
 		if (e.key === 'Enter') {
 			setCurrentTag({ ...currentTag, add: true })
 			setInputState('')
+		}
+		if(e.key === "ArrowDown"){
+			searchItemsRef.current[0].parentNode.tabIndex = 0	
+			searchItemsRef.current[0].parentNode.focus()
+
 		}
 	}
 	return (
@@ -17,7 +23,7 @@ const SearchBar = () => {
 				const value = e.target.value
 				setInputState(value)
 				setCurrentTag({ value: value, add: false })
-			}} onKeyPress={(e) => addTag(e)} autoFocus />
+			}} onKeyPress={(e) => handleKeyPress(e)} onKeyDown={(e) =>handleKeyPress(e)} autoFocus autoComplete="off"/>
 			<aside className='tags-picked'>
 				{
 					tagsPicked.map((tag) => <Tag key={`tag-${tag.value}`} tag={tag} />)
