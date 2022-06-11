@@ -7,6 +7,7 @@ const SearchList = () => {
 	const [filteredData, setFilteredData] = useState(data)
 	useEffect(() => {
 		searchItemsRef.current[0].parentNode.scrollTop = 0
+		console.log(searchItemsRef.current[0].parentNode.scrollTop)
 	},[])
 	useEffect(() => {
 		const newData = filterData(currentTag.value)
@@ -40,16 +41,18 @@ const SearchList = () => {
 		}
 	}
 	const handleKeyPress = (e) => {
-		const browserZoomLevel = Math.round(window.devicePixelRatio);
-		console.log(browserZoomLevel, e.target.scrollTop)
-		if(e.target.tabIndex === 1)	e.target.scrollTop = 40
+		console.log(e.target)
+		const browserZoomLevel = window.devicePixelRatio;
+		if(e.target.tabIndex === 1)	e.target.scrollTop = 0
 		if (e.key === 'ArrowDown') {
 			const currentListLength = e.target.children.length
 			if(e.target.tabIndex < currentListLength - 1){
 			e.target.tabIndex += 1
 			focusOnMe(e.target.tabIndex, 'ArrowDown')
+			
 			const singleElementHeight = searchItemsRef.current[e.target.tabIndex].getBoundingClientRect().height
-			const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex - 1) * browserZoomLevel
+			const withBrowserZoom = browserZoomLevel > 1 ? (browserZoomLevel - 1) * singleElementHeight : (1 - browserZoomLevel) * singleElementHeight * -1
+			const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex - 1)
 			e.target.scrollTop = scrollHeight
 			}
 		}
@@ -58,7 +61,8 @@ const SearchList = () => {
 				e.target.tabIndex -= 1
 				focusOnMe(e.target.tabIndex, 'ArrowUp')
 				const singleElementHeight = searchItemsRef.current[e.target.tabIndex].getBoundingClientRect().height
-				const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex + 1) * browserZoomLevel
+				const scrollHeight = singleElementHeight * parseInt(e.target.tabIndex + 1) 
+				// + browserZoomLevel > 1 ? browserZoomLevel * singleElementHeight * -1 : browserZoomLevel * singleElementHeight
 				e.target.scrollTop = scrollHeight
 			}
 			else{

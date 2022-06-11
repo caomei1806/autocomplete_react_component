@@ -30,5 +30,8 @@
 		&.focus {
 			background-color: $lightGrey;
 		}
+		&:focus {
+			background-color: $lightGrey;
+		}
 	}
 }

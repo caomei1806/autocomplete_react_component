@@ -13,7 +13,9 @@ const SearchBar = () => {
 		}
 		if(e.key === "ArrowDown"){
 			searchItemsRef.current[0].parentNode.tabIndex = 0	
-			searchItemsRef.current[0].parentNode.focus()
+			searchItemsRef.current[0].parentNode.focus({
+  				preventScroll: true
+			})
 
 		}
 	}
